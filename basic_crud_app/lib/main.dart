@@ -4,7 +4,7 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 
 void main() {
-  runApp(MyApp());
+  runApp(const MyApp());
 }
 
 class User {
@@ -49,7 +49,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: UserListPage(),
+      home: const UserListPage(),
     );
   }
 }
@@ -241,41 +241,52 @@ class _UserListPageState extends State<UserListPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('User Management'),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.add),
-            onPressed: () => _showUserDialog(),
-          ),
-        ],
-      ),
-      body: isLoading
-          ? const Center(child: CircularProgressIndicator())
-          : ListView.builder(
-              itemCount: users.length,
-              itemBuilder: (ctx, index) {
-                final user = users[index];
-                return ListTile(
-                  title: Text(user.name),
-                  subtitle: Text(user.email),
-                  trailing: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      IconButton(
-                        icon: const Icon(Icons.edit),
-                        onPressed: () => _showUserDialog(existingUser: user),
-                      ),
-                      IconButton(
-                        icon: const Icon(Icons.delete),
-                        onPressed: () => deleteUser(user.id),
-                      ),
-                    ],
-                  ),
-                );
-              },
+    return MaterialApp(
+      home: Scaffold(
+        appBar: AppBar(
+          title: const Text('User Management'),
+          // leadingWidth: 40,
+          // actions:[
+          // Padding(
+          // left:100,
+          // padding: const EdgeInsets.only(left: 8.0),
+          actions:[ ElevatedButton.icon(
+            style: ButtonStyle(
+              iconSize: WidgetStateProperty.all(4)
+              // padding: const EdgeInsets.symmetric(horizontal: 200.0, vertical: 150.0),
             ),
+            label: const Text("Create User"),
+            onPressed: () => _showUserDialog(),
+            // ),
+          ),]
+          // ],
+        ),
+        body: isLoading
+            ? const Center(child: CircularProgressIndicator())
+            : ListView.builder(
+                itemCount: users.length,
+                itemBuilder: (ctx, index) {
+                  final user = users[index];
+                  return ListTile(
+                    title: Text(user.name),
+                    subtitle: Text(user.email),
+                    trailing: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        IconButton(
+                          icon: const Icon(Icons.edit),
+                          onPressed: () => _showUserDialog(existingUser: user),
+                        ),
+                        IconButton(
+                          icon: const Icon(Icons.delete),
+                          onPressed: () => deleteUser(user.id),
+                        ),
+                      ],
+                    ),
+                  );
+                },
+              ),
+      ),
     );
   }
 }
