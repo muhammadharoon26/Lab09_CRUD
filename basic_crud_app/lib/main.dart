@@ -13,12 +13,11 @@ class User {
   String username;
   String email;
 
-  User({
-    required this.id, 
-    required this.name, 
-    required this.username, 
-    required this.email
-  });
+  User(
+      {required this.id,
+      required this.name,
+      required this.username,
+      required this.email});
 
   factory User.fromJson(Map<String, dynamic> json) {
     return User(
@@ -40,6 +39,8 @@ class User {
 }
 
 class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -54,6 +55,8 @@ class MyApp extends StatelessWidget {
 }
 
 class UserListPage extends StatefulWidget {
+  const UserListPage({super.key});
+
   @override
   _UserListPageState createState() => _UserListPageState();
 }
@@ -71,9 +74,8 @@ class _UserListPageState extends State<UserListPage> {
   // Fetch Users (Read Operation)
   Future<void> fetchUsers() async {
     try {
-      final response = await http.get(
-        Uri.parse('https://jsonplaceholder.typicode.com/users')
-      );
+      final response = await http
+          .get(Uri.parse('https://jsonplaceholder.typicode.com/users'));
 
       if (response.statusCode == 200) {
         List<dynamic> body = json.decode(response.body);
@@ -121,7 +123,8 @@ class _UserListPageState extends State<UserListPage> {
   Future<void> updateUser(User updatedUser) async {
     try {
       final response = await http.put(
-        Uri.parse('https://jsonplaceholder.typicode.com/users/${updatedUser.id}'),
+        Uri.parse(
+            'https://jsonplaceholder.typicode.com/users/${updatedUser.id}'),
         headers: {"Content-Type": "application/json"},
         body: json.encode(updatedUser.toJson()),
       );
@@ -146,8 +149,7 @@ class _UserListPageState extends State<UserListPage> {
   Future<void> deleteUser(int userId) async {
     try {
       final response = await http.delete(
-        Uri.parse('https://jsonplaceholder.typicode.com/users/$userId')
-      );
+          Uri.parse('https://jsonplaceholder.typicode.com/users/$userId'));
 
       if (response.statusCode == 200) {
         setState(() {
@@ -166,11 +168,11 @@ class _UserListPageState extends State<UserListPage> {
     showDialog(
       context: context,
       builder: (ctx) => AlertDialog(
-        title: Text('Error'),
+        title: const Text('Error'),
         content: Text(message),
         actions: <Widget>[
           TextButton(
-            child: Text('Okay'),
+            child: const Text('Okay'),
             onPressed: () {
               Navigator.of(ctx).pop();
             },
@@ -182,15 +184,12 @@ class _UserListPageState extends State<UserListPage> {
 
   // Show Create/Edit User Dialog
   void _showUserDialog({User? existingUser}) {
-    final nameController = TextEditingController(
-      text: existingUser?.name ?? ''
-    );
-    final usernameController = TextEditingController(
-      text: existingUser?.username ?? ''
-    );
-    final emailController = TextEditingController(
-      text: existingUser?.email ?? ''
-    );
+    final nameController =
+        TextEditingController(text: existingUser?.name ?? '');
+    final usernameController =
+        TextEditingController(text: existingUser?.username ?? '');
+    final emailController =
+        TextEditingController(text: existingUser?.email ?? '');
 
     showDialog(
       context: context,
@@ -201,21 +200,21 @@ class _UserListPageState extends State<UserListPage> {
           children: [
             TextField(
               controller: nameController,
-              decoration: InputDecoration(labelText: 'Name'),
+              decoration: const InputDecoration(labelText: 'Name'),
             ),
             TextField(
               controller: usernameController,
-              decoration: InputDecoration(labelText: 'Username'),
+              decoration: const InputDecoration(labelText: 'Username'),
             ),
             TextField(
               controller: emailController,
-              decoration: InputDecoration(labelText: 'Email'),
+              decoration: const InputDecoration(labelText: 'Email'),
             ),
           ],
         ),
         actions: <Widget>[
           TextButton(
-            child: Text('Cancel'),
+            child: const Text('Cancel'),
             onPressed: () => Navigator.of(ctx).pop(),
           ),
           ElevatedButton(
@@ -244,16 +243,16 @@ class _UserListPageState extends State<UserListPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('User Management'),
+        title: const Text('User Management'),
         actions: [
           IconButton(
-            icon: Icon(Icons.add),
+            icon: const Icon(Icons.add),
             onPressed: () => _showUserDialog(),
           ),
         ],
       ),
       body: isLoading
-          ? Center(child: CircularProgressIndicator())
+          ? const Center(child: CircularProgressIndicator())
           : ListView.builder(
               itemCount: users.length,
               itemBuilder: (ctx, index) {
@@ -265,11 +264,11 @@ class _UserListPageState extends State<UserListPage> {
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       IconButton(
-                        icon: Icon(Icons.edit),
+                        icon: const Icon(Icons.edit),
                         onPressed: () => _showUserDialog(existingUser: user),
                       ),
                       IconButton(
-                        icon: Icon(Icons.delete),
+                        icon: const Icon(Icons.delete),
                         onPressed: () => deleteUser(user.id),
                       ),
                     ],
